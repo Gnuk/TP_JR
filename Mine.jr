@@ -1,0 +1,41 @@
+public class Mine{
+	/*
+	* Cannaux
+	*/
+	private static op void niveau_H20(int);
+	private static op void niveau_CO(int);
+	private static op void niveau_CH4(int);
+	private static op void alerte_H20_haut(boolean);
+	private static op void alerte_H20_bas(boolean);
+	private static op void alerte_gaz_haut(boolean);
+	private static op void alerte_gaz_bas(boolean);
+	private static int niveau_H20_haut;
+	private static int niveau_H20_bas;
+	private static int seuil_CO;
+	private static int seuil_CH4;
+
+	/**
+	* Détection du niveau d'eau haut
+	* d_H20_haut(niveau_H20, alerte_H20_haut, niveau_H20_haut)
+	*/
+	static process d_H20_haut{
+		
+	}
+
+	/**
+	* Détection du niveau d'eau bas
+	* d_H20_bas(niveau_H20, alerte_H20_bas, niveau_H20_bas)
+	*/
+	static process d_H20_bas{
+		
+	}
+
+	/**
+	* Détection du niveau de gaz bas
+	* d_gaz_bas(niveau_CO, niveau_CH4, alerte_gaz_haut, alerte_gaz_bas, seuil_CO, seuil_CH4)
+	*/
+	static process d_gaz_bas{
+		
+	}
+	public static void main(String[] args){}
+}
