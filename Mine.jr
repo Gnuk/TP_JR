@@ -21,10 +21,6 @@ public class Mine{
 
 // ========================================================================== //
 
-	private process bidon{
-		
-	}
-
 	/**
 	* Représentation du système
 	*/
@@ -46,7 +42,7 @@ public class Mine{
 			if(v<niveau_H2O_haut){
 				send d_H2O_haut();
 			}
-			else{ + i
+			else{
 				call alerte_H2O_haut();
 			}
 		}
