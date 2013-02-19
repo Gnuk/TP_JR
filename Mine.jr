@@ -5,59 +5,160 @@ public class Mine{
 	private static op void niveau_H2O(int);
 	private static op void niveau_CO(int);
 	private static op void niveau_CH4(int);
-	private static op void alerte_H2O_haut(boolean);
-	private static op void alerte_H2O_bas(boolean);
-	private static op void alerte_gaz_haut(boolean);
-	private static op void alerte_gaz_bas(boolean);
-	private static op void activ_ventil(boolean);
-	private static op void activ_pompe(boolean);
-	private static op void desactiv_ventil(boolean);
-	private static op void desactiv_pompe(boolean);
+	private static op void alerte_H2O_haut();
+	private static op void alerte_H2O_bas();
+	private static op void alerte_gaz_haut();
+	private static op void alerte_gaz_bas();
+	private static op void activ_ventil();
+	private static op void activ_pompe();
+	private static op void desactiv_ventil();
+	private static op void desactiv_pompe();
 
-	private static int niveau_H2O_haut;
-	private static int niveau_H2O_bas;
-	private static int seuil_CO;
-	private static int seuil_CH4;
+	private static final int niveau_H2O_haut = 100;
+	private static final int niveau_H2O_bas = 20;
+	private static final int seuil_CO = 90;
+	private static final int seuil_CH4 = 90;
+
+// ========================================================================== //
+
+	private process bidon{
+		
+	}
+
+	/**
+	* Représentation du système
+	*/
+	private process capteurH2O((int id = 1; id < 1; id++)){
+		System.out.println("Mon capteur H2O" + id);
+	}
+	private process capteurCO{
+		System.out.println("Mon capteur CO");
+	}
+
+// ========================================================================== //
 
 	/**
 	* Détection du niveau d'eau haut
-	* d_H2O_haut(niveau_H2O, alerte_H2O_haut, niveau_H2O_haut)
+	* d_H2O_haut(niveau_H2O, alerte_H2O_h + iaut, niveau_H2O_haut)
 	*/
-	static process d_H2O_haut{
-		
+	private process d_H2O_haut{
+		inni void niveau_H2O(int v){
+			if(v<niveau_H2O_haut){
+				send d_H2O_haut();
+			}
+			else{ + i
+				call alerte_H2O_haut();
+			}
+		}
 	}
 
 	/**
 	* Détection du niveau d'eau bas
 	* d_H2O_bas(niveau_H2O, alerte_H2O_bas, niveau_H2O_bas)
 	*/
-	static process d_H2O_bas{
-		
+	private process d_H2O_bas{
+		inni void niveau_H2O(int v){
+			if(v>niveau_H2O_bas){
+				send d_H2O_bas();
+			}
+			else{
+				call alerte_H2O_bas();
+			}
+		}
 	}
 
 	/**
 	* Détection du niveau de gaz bas
 	* d_gaz_bas(niveau_CO, niveau_CH4, alerte_gaz_haut, alerte_gaz_bas, seuil_CO, seuil_CH4)
 	*/
-	static process d_gaz_bas{
-		
+	private process d_gaz_bas{
+		inni void niveau_CO(int vCO){
+			inni void niveau_CH4(int vCH4){
+				if(vCO > seuil_CO || vCH4 > seuil_CH4){
+					send d_gaz_bas();
+				}
+				else{
+					call alerte_gaz_bas();
+				}
+			}
+		}
 	}
 	
 	/**
 	* Détection du niveau d'eau et du gaz bas
 	* d_H2O_bas_gaz(niveau_H2O, niveau_CO, niveau_CH4, alerte_H2O_bas, seuil_CO, seuil_CH4, activ_ventil)
 	*/
-	static process d_H2O_bas_gaz{
-		
+	private process d_H2O_bas_gaz{
+		inni void niveau_H2O(int vH2O){
+			if(vH2O < niveau_H2O_bas){
+				call alerte_H2O_bas();
+			}
+			else{
+				inni void niveau_CO(int vCO){
+					inni void niveau_CH4(int vCH4){
+						if(vCO > seuil_CO || vCH4 > seuil_CH4){
+							call activ_ventil();
+							send d_H2O_bas();
+						}
+						else{
+							send d_H2O_bas_gaz();
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	/**
 	* Commande
 	* commande(niveau_H2O, niveau_CO, niveau_CH4, alerte_H2O_haut, alerte_H2O_bas, alerte_gaz_haut, alerte_gaz_bas, niveau_H2O_haut, niveau_H2O_bas, seuil_CO, seuil_CH4, activ_pompe, desactiv_pompe, activ_ventil, desactiv_centil)
 	*/
-	static process commande{
-		
+	private process commande{
+		send d_H2O_haut();
+		send commandeH20Haut();
+		send commandeH20Bas();
 	}
 	
-	public static void main(String[] args){}
+	private process commandeH20Haut{
+		inni void alerte_H2O_haut(){
+			inni void niveau_CO(int vCO){
+				inni void niveau_CH4(int vCH4){
+					if(vCO > seuil_CO || vCH4 > seuil_CH4){
+						send commandVentil();
+						send commandPompe();
+					}
+				}
+			}
+		}
+	}
+	
+	private process commandeH20Bas{
+		inni void alerte_H2O_bas(){
+			call desactiv_pompe();
+			call desactiv_ventil();
+			send commande();
+		}
+	}
+	
+	private process commandVentil{
+		call activ_ventil();
+		send d_gaz_bas();
+	}
+	
+	private process commandPompe{
+		inni void alerte_gaz_bas(){
+			call activ_pompe();
+			send d_gaz_bas();
+		}
+	}
+	
+	private Mine(){
+// 		send commande();
+		send capteurH2O(1);
+		send capteurCO();
+	}
+	
+	public static void main(String[] args){
+		new Mine();
+	}
 }
