@@ -2,31 +2,36 @@ public class Mine{
 	/*
 	* Cannaux
 	*/
-	private static op void niveau_H20(int);
+	private static op void niveau_H2O(int);
 	private static op void niveau_CO(int);
 	private static op void niveau_CH4(int);
-	private static op void alerte_H20_haut(boolean);
-	private static op void alerte_H20_bas(boolean);
+	private static op void alerte_H2O_haut(boolean);
+	private static op void alerte_H2O_bas(boolean);
 	private static op void alerte_gaz_haut(boolean);
 	private static op void alerte_gaz_bas(boolean);
-	private static int niveau_H20_haut;
-	private static int niveau_H20_bas;
+	private static op void activ_ventil(boolean);
+	private static op void activ_pompe(boolean);
+	private static op void desactiv_ventil(boolean);
+	private static op void desactiv_pompe(boolean);
+
+	private static int niveau_H2O_haut;
+	private static int niveau_H2O_bas;
 	private static int seuil_CO;
 	private static int seuil_CH4;
 
 	/**
 	* Détection du niveau d'eau haut
-	* d_H20_haut(niveau_H20, alerte_H20_haut, niveau_H20_haut)
+	* d_H2O_haut(niveau_H2O, alerte_H2O_haut, niveau_H2O_haut)
 	*/
-	static process d_H20_haut{
+	static process d_H2O_haut{
 		
 	}
 
 	/**
 	* Détection du niveau d'eau bas
-	* d_H20_bas(niveau_H20, alerte_H20_bas, niveau_H20_bas)
+	* d_H2O_bas(niveau_H2O, alerte_H2O_bas, niveau_H2O_bas)
 	*/
-	static process d_H20_bas{
+	static process d_H2O_bas{
 		
 	}
 
@@ -37,5 +42,22 @@ public class Mine{
 	static process d_gaz_bas{
 		
 	}
+	
+	/**
+	* Détection du niveau d'eau et du gaz bas
+	* d_H2O_bas_gaz(niveau_H2O, niveau_CO, niveau_CH4, alerte_H2O_bas, seuil_CO, seuil_CH4, activ_ventil)
+	*/
+	static process d_H2O_bas_gaz{
+		
+	}
+	
+	/**
+	* Commande
+	* commande(niveau_H2O, niveau_CO, niveau_CH4, alerte_H2O_haut, alerte_H2O_bas, alerte_gaz_haut, alerte_gaz_bas, niveau_H2O_haut, niveau_H2O_bas, seuil_CO, seuil_CH4, activ_pompe, desactiv_pompe, activ_ventil, desactiv_centil)
+	*/
+	static process commande{
+		
+	}
+	
 	public static void main(String[] args){}
 }
