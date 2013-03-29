@@ -17,8 +17,11 @@ public class Mine{
 	/*
 	* Processus
 	*/
-	private op void capteurH2O();
-	private op void capteurCO();
+	private op void capteurH2O(int);
+	private op void capteurCO(int);
+	private op void capteurCH4(int);
+	private op void ventilateur();
+	private op void pompe();
 	private op void d_H2O_haut();
 	private op void d_H2O_bas();
 	private op void d_gaz_bas();
@@ -29,22 +32,76 @@ public class Mine{
 	private op void commandVentil();
 	private op void commandPompe();
 
-	private static final int niveau_H2O_haut = 100;
+	private static final int niveau_H2O_haut = 80;
 	private static final int niveau_H2O_bas = 20;
-	private static final int seuil_CO = 90;
-	private static final int seuil_CH4 = 90;
+	private static final int seuil_CO = 80;
+	private static final int seuil_CH4 = 80;
+	
+	private static boolean etatPompe = false;
+	private static boolean etatVentilateur = false;
 
 // ========================================================================== //
+
+	private static int changeVal(int val, boolean etat, int add, int sub){
+		if(etat == true){
+			val = val-sub;
+		}
+		val=val+add;
+		if(val<0){
+			val = 0;
+		}
+		return val;
+	}
 
 	/**
 	* Représentation du système
 	*/
-	private void capteurH2O(){
-		System.out.println("Mon capteur H2O");
+	private void capteurH2O(int val){
+		val = changeVal(val, etatPompe, 3, 5);
+		call niveau_H2O(val);
+		System.out.println("H2O : " + val + "%");
+		send capteurH2O(val);
 	}
-	private void capteurCO(){
-		System.out.println("Mon capteur CO");
+	
+	private void capteurCO(int val){
+		val = changeVal(val, etatVentilateur, 3, 7);
+		call niveau_CO(val);
+		System.out.println("CO : " + val + "%");
+		send capteurCO(val);
+		
 	}
+	
+	private void capteurCH4(int val){
+		val = changeVal(val, etatVentilateur, 3, 7);
+		call niveau_CH4(val);
+		System.out.println("CH4 : " + val + "%");
+		send capteurCH4(val);
+	}
+	
+	private void ventilateur(){
+		inni void activ_ventil(){
+			System.out.println("Ventilateur Activée");
+			etatVentilateur = true;
+		}
+		[] void desactiv_ventil(){
+			System.out.println("Ventilateur Désactivé");
+			etatVentilateur = false;
+		}
+		send ventilateur();
+	}
+	
+	private void pompe(){
+		inni void activ_pompe(){
+			System.out.println("Pompe Activée");
+			etatPompe = true;
+		}
+		[] void desactiv_pompe(){
+			System.out.println("Pompe Désactivée");
+			etatPompe = false;
+		}
+		send pompe();
+	}
+
 
 // ========================================================================== //
 
@@ -109,7 +166,7 @@ public class Mine{
 					inni void niveau_CH4(int vCH4){
 						if(vCO > seuil_CO || vCH4 > seuil_CH4){
 							call activ_ventil();
-							send d_H2O_bas();
+							send d_H2O_bas_gaz();
 						}
 						else{
 							send d_H2O_bas_gaz();
@@ -138,6 +195,10 @@ public class Mine{
 						send commandVentil();
 						send commandPompe();
 					}
+					else{
+						call activ_pompe();
+						send d_H2O_bas_gaz();
+					}
 				}
 			}
 		}
@@ -163,10 +224,16 @@ public class Mine{
 		}
 	}
 	
+	/**
+	* Système
+	*/
 	private Mine(){
-// 		send commande();
-		send capteurH2O();
-		send capteurCO();
+ 		send commande();
+		send capteurH2O(50);
+		send capteurCO(50);
+		send capteurCH4(50);
+		send ventilateur();
+		send pompe();
 	}
 	
 	public static void main(String[] args){
