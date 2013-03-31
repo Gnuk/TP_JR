@@ -61,7 +61,7 @@ public class Mine{
 	private static final int niveau_H2O_haut = 80;
 	private static final int niveau_H2O_bas = 20;
 	private static final int seuil_CO = 70;
-	private static final int seuil_CH4 = 60;
+	private static final int seuil_CH4 = 70;
 
 	/*
 	* Etats
@@ -70,9 +70,9 @@ public class Mine{
 	private static boolean etatVentilateur = false;
 	
 	/*
-	* Ralentissement des capteurs et de l'environnement
+	* Ralentissement de l'environnement
 	*/
-	private static final int ralentissement = 50;
+	private static final int ralentissement = 75;
 	
 	/*
 	* Interface graphique
@@ -130,52 +130,33 @@ public class Mine{
 	* Capteur H20
 	*/
 	private void capteurH2O(){
-		try{
-			Thread.sleep(ralentissement);
 			call niveau_H2O(H2Oval);
 			// VUE;
 			System.out.println("H2O : " + H2Oval + "%");
 			//
 			send capteurH2O();
-		}
-		catch(InterruptedException e){
-			System.out.println(e);
-		}
 	}
 	
 	/**
 	* Capteur CO
 	*/
 	private void capteurCO(){
-		try{
-			Thread.sleep(ralentissement);
 			call niveau_CO(COval);
 			// VUE
 			System.out.println("CO : " + COval + "%");
 			//
 			send capteurCO();
-		}
-		catch(InterruptedException e){
-			System.out.println(e);
-		}
-		
 	}
 	
 	/**
 	* Capteur CH4
 	*/
 	private void capteurCH4(){
-		try{
-			Thread.sleep(ralentissement);
 			call niveau_CH4(CH4val);
 			// VUE
 			System.out.println("CH4 : " + CH4val + "%");
 			//
 			send capteurCH4();
-		}
-		catch(InterruptedException e){
-			System.out.println(e);
-		}
 	}
 	
 	/**
