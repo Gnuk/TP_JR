@@ -1,3 +1,18 @@
+import java.lang.Thread;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import java.awt.Rectangle;
+import java.awt.Canvas;
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Frame;
+
+/**
+* TP 1 de Parallelisme Fonctionnement d'une mine
+* @author Anthony REY <anthony.rey@etu.univ-savoie.fr>
+* @author Yohann Berthon <yohann.berthon@etu.univ-savoie.fr>
+*/
 public class Mine{
 	/*
 	* Cannaux
@@ -17,9 +32,10 @@ public class Mine{
 	/*
 	* Processus
 	*/
-	private op void capteurH2O(int);
-	private op void capteurCO(int);
-	private op void capteurCH4(int);
+	private op void environnement();
+	private op void capteurH2O();
+	private op void capteurCO();
+	private op void capteurCH4();
 	private op void ventilateur();
 	private op void pompe();
 	private op void d_H2O_haut();
@@ -32,16 +48,49 @@ public class Mine{
 	private op void commandVentil();
 	private op void commandPompe();
 
+	/*
+	* Valeurs de l'environnement
+	*/
+	private static int H2Oval = 0;
+	private static int COval = 0;
+	private static int CH4val = 0;
+	
+	/*
+	* Seuils
+	*/
 	private static final int niveau_H2O_haut = 80;
 	private static final int niveau_H2O_bas = 20;
-	private static final int seuil_CO = 80;
-	private static final int seuil_CH4 = 80;
-	
+	private static final int seuil_CO = 70;
+	private static final int seuil_CH4 = 60;
+
+	/*
+	* Etats
+	*/
 	private static boolean etatPompe = false;
 	private static boolean etatVentilateur = false;
+	
+	/*
+	* Ralentissement des capteurs et de l'environnement
+	*/
+	private static final int ralentissement = 50;
+	
+	/*
+	* Interface graphique
+	*/
+	
+	// Affichage
+	private JPanel panel;
 
-// ========================================================================== //
+// Méthodes //
 
+	/**
+	* Calcule la nouvelle valeur (pourcentage) d'un capteur
+	* @param val La valeur initiale
+	* @param etat L'état (Correspond à l'état du ventilateur ou à l'état de la pompe par exemple)
+	* @param add La valeur ajoutée
+	* @param sub La valeur soustraite
+	* @return La valeur calculée
+	*/
 	private static int changeVal(int val, boolean etat, int add, int sub){
 		if(etat == true){
 			val = val-sub;
@@ -50,37 +99,91 @@ public class Mine{
 		if(val<0){
 			val = 0;
 		}
+		else if(val > 100){
+			val = 100;
+			System.out.println("Saturation");
+		}
 		return val;
 	}
+	
+	/**
+	* Simule l'environnement de la mine
+	*/
+	private void environnement(){
+		try{
+			Thread.sleep(ralentissement);
+			H2Oval = changeVal(H2Oval, etatPompe, 5, 7);
+			COval = changeVal(COval, etatVentilateur, 2, 4);
+			CH4val = changeVal(CH4val, etatVentilateur, 1, 2);
+			panel.repaint();
+			send environnement();
+		}
+		catch(InterruptedException e){
+			System.out.println(e);
+		}
+	}
+
+	
+// Capteurs, ventilateur et pompe //
 
 	/**
-	* Représentation du système
+	* Capteur H20
 	*/
-	private void capteurH2O(int val){
-		val = changeVal(val, etatPompe, 3, 5);
-		call niveau_H2O(val);
-		System.out.println("H2O : " + val + "%");
-		send capteurH2O(val);
+	private void capteurH2O(){
+		try{
+			Thread.sleep(ralentissement);
+			call niveau_H2O(H2Oval);
+			// VUE;
+			System.out.println("H2O : " + H2Oval + "%");
+			//
+			send capteurH2O();
+		}
+		catch(InterruptedException e){
+			System.out.println(e);
+		}
 	}
 	
-	private void capteurCO(int val){
-		val = changeVal(val, etatVentilateur, 3, 7);
-		call niveau_CO(val);
-		System.out.println("CO : " + val + "%");
-		send capteurCO(val);
+	/**
+	* Capteur CO
+	*/
+	private void capteurCO(){
+		try{
+			Thread.sleep(ralentissement);
+			call niveau_CO(COval);
+			// VUE
+			System.out.println("CO : " + COval + "%");
+			//
+			send capteurCO();
+		}
+		catch(InterruptedException e){
+			System.out.println(e);
+		}
 		
 	}
 	
-	private void capteurCH4(int val){
-		val = changeVal(val, etatVentilateur, 3, 7);
-		call niveau_CH4(val);
-		System.out.println("CH4 : " + val + "%");
-		send capteurCH4(val);
+	/**
+	* Capteur CH4
+	*/
+	private void capteurCH4(){
+		try{
+			Thread.sleep(ralentissement);
+			call niveau_CH4(CH4val);
+			// VUE
+			System.out.println("CH4 : " + CH4val + "%");
+			//
+			send capteurCH4();
+		}
+		catch(InterruptedException e){
+			System.out.println(e);
+		}
 	}
 	
+	/**
+	* Ventilateur
+	*/
 	private void ventilateur(){
 		inni void activ_ventil(){
-			System.out.println("Ventilateur Activée");
+			System.out.println("Ventilateur Activé");
 			etatVentilateur = true;
 		}
 		[] void desactiv_ventil(){
@@ -90,6 +193,9 @@ public class Mine{
 		send ventilateur();
 	}
 	
+	/**
+	* Pompe
+	*/
 	private void pompe(){
 		inni void activ_pompe(){
 			System.out.println("Pompe Activée");
@@ -103,7 +209,7 @@ public class Mine{
 	}
 
 
-// ========================================================================== //
+// Détections, et commande //
 
 	/**
 	* Détection du niveau d'eau haut
@@ -223,19 +329,92 @@ public class Mine{
 			send d_gaz_bas();
 		}
 	}
+
+	private void createView(){
+		JFrame fenetre = new JFrame();
+		this.panel = new JPanel(){
+			public void paint(Graphics g){
+				g.setColor(Color.white);
+				g.fillRect(0,0,800,100);
+				if(H2Oval == 100){
+					g.setColor(Color.red);
+				}
+				else if(H2Oval>niveau_H2O_haut){
+					g.setColor(Color.orange);
+				}
+				else if(H2Oval<niveau_H2O_bas){
+					g.setColor(Color.blue);
+				}
+				else{
+					g.setColor(Color.green);
+				}
+				g.fillRect(10,40,H2Oval,10);
+				if(CH4val == 100){
+					g.setColor(Color.red);
+				}
+				else if(CH4val>seuil_CH4){
+					g.setColor(Color.orange);
+				}
+				else{
+					g.setColor(Color.green);
+				}
+				g.fillRect(110,40,CH4val,10);
+				if(COval == 100){
+					g.setColor(Color.red);
+				}
+				else if(COval>seuil_CO){
+					g.setColor(Color.orange);
+				}
+				else{
+					g.setColor(Color.green);
+				}
+				g.fillRect(220,40,COval,10);
+				g.setColor(Color.black);
+				g.drawString("H2O : "+ H2Oval +"%", 10, 20);
+				g.drawString("CH4 : "+ CH4val +"%", 110, 20);
+				g.drawString("CO : "+ COval +"%", 220, 20);
+				if(etatVentilateur){
+					g.drawString("Ventilateur actif", 500, 20);
+				}
+				else{
+					g.drawString("Ventilateur inactif", 500, 20);
+				}
+				if(etatPompe){
+					g.drawString("Pompe active", 500, 60);
+				}
+				else{
+					g.drawString("Pompe inactive", 500, 60);
+				}
+			}
+		};
+		fenetre.setTitle("Similation du fonctionnement d'une Mine");
+		fenetre.setSize(800, 100);
+		fenetre.setLocationRelativeTo(null);
+		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		fenetre.setLayout(null);
+		fenetre.setContentPane(panel);
+		fenetre.setVisible(true);
+	}
 	
+// Lancement principal //
 	/**
 	* Système
 	*/
 	private Mine(){
+		this.createView();
+		send environnement();
  		send commande();
-		send capteurH2O(50);
-		send capteurCO(50);
-		send capteurCH4(50);
+ 		// On estimera qu'au début de la simulation, les niveaux sont à 50%
+		send capteurH2O();
+		send capteurCO();
+		send capteurCH4();
 		send ventilateur();
 		send pompe();
 	}
 	
+	/**
+	* Lancement du programme
+	*/
 	public static void main(String[] args){
 		new Mine();
 	}
