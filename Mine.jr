@@ -80,6 +80,8 @@ public class Mine{
 	
 	// Affichage
 	private JPanel panel;
+	private static final int windowL = 800;
+	private static final int windowH = 600;
 
 // Méthodes //
 
@@ -130,33 +132,51 @@ public class Mine{
 	* Capteur H20
 	*/
 	private void capteurH2O(){
+		try{
+			Thread.sleep(ralentissement/2);
 			call niveau_H2O(H2Oval);
 			// VUE;
 			System.out.println("H2O : " + H2Oval + "%");
 			//
 			send capteurH2O();
+		}
+		catch(InterruptedException e){
+			System.out.println(e);
+		}
 	}
 	
 	/**
 	* Capteur CO
 	*/
 	private void capteurCO(){
+		try{
+			Thread.sleep(ralentissement/2);
 			call niveau_CO(COval);
 			// VUE
 			System.out.println("CO : " + COval + "%");
 			//
 			send capteurCO();
+		}
+		catch(InterruptedException e){
+			System.out.println(e);
+		}
 	}
 	
 	/**
 	* Capteur CH4
 	*/
 	private void capteurCH4(){
+		try{
+			Thread.sleep(ralentissement/2);
 			call niveau_CH4(CH4val);
 			// VUE
 			System.out.println("CH4 : " + CH4val + "%");
 			//
 			send capteurCH4();
+		}
+		catch(InterruptedException e){
+			System.out.println(e);
+		}
 	}
 	
 	/**
@@ -315,8 +335,17 @@ public class Mine{
 		JFrame fenetre = new JFrame();
 		this.panel = new JPanel(){
 			public void paint(Graphics g){
+				Color colorLightGreen = new Color(180, 255, 200);
+				int gaz;
+				if(COval > CH4val){
+					gaz = COval;
+				}
+				else{
+					gaz = CH4val;
+				}
+				
 				g.setColor(Color.white);
-				g.fillRect(0,0,800,100);
+				g.fillRect(0,0,windowL,windowH);
 				if(H2Oval == 100){
 					g.setColor(Color.red);
 				}
@@ -354,22 +383,70 @@ public class Mine{
 				g.drawString("H2O : "+ H2Oval +"%", 10, 20);
 				g.drawString("CH4 : "+ CH4val +"%", 110, 20);
 				g.drawString("CO : "+ COval +"%", 220, 20);
+				
+				// Niveau d'eau + sol
+				g.setColor(Color.black);
+				g.fillRect(0, 390, 800, 210);
+				
+				
+				g.setColor(colorLightGreen);
+				g.fillRect(0, 80, 800, gaz*3);
+				
+				g.setColor(Color.black);
+				g.fillOval(600, 320, 20, 20);
+				g.fillRect(608, 340, 4, 2);
+				g.fillRect(598, 342, 24, 25);
+				g.fillRect(592, 342, 5, 20);
+				g.fillRect(623, 342, 5, 20);
+				g.fillRect(600, 368, 6, 20);
+				g.fillRect(614, 368, 6, 20);
+				
 				if(etatVentilateur){
 					g.drawString("Ventilateur actif", 500, 20);
+					g.setColor(Color.lightGray);
+					g.fillOval(650, 100, 60, 60);
+					g.fillRect(650, 165, 1, 20);
+					g.fillRect(660, 170, 1, 20);
+					g.fillRect(670, 165, 1, 20);
+					g.fillRect(680, 170, 1, 20);
+					g.fillRect(690, 165, 1, 20);
+					g.fillRect(700, 170, 1, 20);
+					g.fillRect(710, 165, 1, 20);
+					g.setColor(Color.green);
+					g.fillOval(665, 115, 30, 30);
 				}
 				else{
 					g.drawString("Ventilateur inactif", 500, 20);
+					g.setColor(Color.gray);
+					g.fillOval(650, 100, 60, 60);
+					g.setColor(Color.red);
+					g.fillOval(665, 115, 30, 30);
 				}
+				g.setColor(Color.black);
 				if(etatPompe){
 					g.drawString("Pompe active", 500, 60);
+					g.setColor(Color.lightGray);
+					g.fillOval(50, 370, 40, 40);
+					g.fillRect(60, 390, 20, 170);
+					g.setColor(Color.green);
+					g.fillOval(60, 380, 20, 20);
 				}
 				else{
 					g.drawString("Pompe inactive", 500, 60);
+					g.setColor(Color.gray);
+					g.fillOval(50, 370, 40, 40);
+					g.fillRect(60, 390, 20, 170);
+					g.setColor(Color.red);
+					g.fillOval(60, 380, 20, 20);
 				}
+				
+				g.setColor(Color.blue);
+				g.fillRect(0,400 + (200-(H2Oval*2)),800, (H2Oval*2));
+				
 			}
 		};
 		fenetre.setTitle("Similation du fonctionnement d'une Mine");
-		fenetre.setSize(800, 100);
+		fenetre.setSize(windowL, windowH);
 		fenetre.setLocationRelativeTo(null);
 		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fenetre.setLayout(null);
