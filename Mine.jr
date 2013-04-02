@@ -335,7 +335,6 @@ public class Mine{
 		JFrame fenetre = new JFrame();
 		this.panel = new JPanel(){
 			public void paint(Graphics g){
-				Color colorLightGreen = new Color(180, 255, 200);
 				int gaz;
 				if(COval > CH4val){
 					gaz = COval;
@@ -384,22 +383,21 @@ public class Mine{
 				g.drawString("CH4 : "+ CH4val +"%", 110, 20);
 				g.drawString("CO : "+ COval +"%", 220, 20);
 				
+				g.setColor(new Color(200, 180, 130));
+				g.fillRect(0, 80, 800, 520);
+				
 				// Niveau d'eau + sol
 				g.setColor(Color.black);
 				g.fillRect(0, 390, 800, 210);
-				
-				
-				g.setColor(colorLightGreen);
-				g.fillRect(0, 80, 800, gaz*3);
 				
 				g.setColor(Color.black);
 				g.fillOval(600, 320, 20, 20);
 				g.fillRect(608, 340, 4, 2);
 				g.fillRect(598, 342, 24, 25);
-				g.fillRect(592, 342, 5, 20);
-				g.fillRect(623, 342, 5, 20);
-				g.fillRect(600, 368, 6, 20);
-				g.fillRect(614, 368, 6, 20);
+				g.fillRect(592, 342, 5, 25);
+				g.fillRect(623, 342, 5, 25);
+				g.fillRect(600, 368, 6, 21);
+				g.fillRect(614, 368, 6, 21);
 				
 				if(etatVentilateur){
 					g.drawString("Ventilateur actif", 500, 20);
@@ -422,6 +420,11 @@ public class Mine{
 					g.setColor(Color.red);
 					g.fillOval(665, 115, 30, 30);
 				}
+				
+				
+				g.setColor(new Color(180, 255, 200, 50));
+				g.fillRect(0, 80, 800, gaz*3);
+				
 				g.setColor(Color.black);
 				if(etatPompe){
 					g.drawString("Pompe active", 500, 60);
@@ -440,7 +443,7 @@ public class Mine{
 					g.fillOval(60, 380, 20, 20);
 				}
 				
-				g.setColor(Color.blue);
+				g.setColor(new Color(0,180,255,180));
 				g.fillRect(0,400 + (200-(H2Oval*2)),800, (H2Oval*2));
 				
 			}
