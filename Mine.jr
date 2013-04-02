@@ -401,7 +401,7 @@ public class Mine{
 				
 				if(etatVentilateur){
 					g.drawString("Ventilateur actif", 500, 20);
-					g.setColor(Color.lightGray);
+					g.setColor(new Color(50,50,50));
 					g.fillOval(650, 100, 60, 60);
 					g.fillRect(650, 165, 1, 20);
 					g.fillRect(660, 170, 1, 20);
