@@ -40,12 +40,33 @@ JR est un langage qui propose des structures particulières pour réaliser du pa
 #### Prérequis
 Avant d'installer JR lui-même, il vous faudra
 
-* Java
-* Perl
+* __Java__
+* __Perl__ : Vous pourrez trouver des informations supplémentaires dans le tutoriel de votre système d'exploitation
 
 #### Windows
 
+< INSTALLER JR SOUS WINDOWS >
+
 #### Linux (Unix)
+
+Vous pouvez suivre ce [tutoriel](http://www.cs.ucdavis.edu/~olsson/research/jr/versions/2.00605/install.html "Tutoriel d'installation JR (en)") qui contient les informations nécessaire pour __perl__ ainsi que l'archive de [JR](http://www.cs.ucdavis.edu/~olsson/research/jr/versions/2.00605/jr.tar.gz "Archive JR").
+
+##### Le Path
+
+Il faut définir le path (mettez-le directement dans votre fichier .bashrc situé dans votre $HOME) :
+
+	export JR_HOME=/chemin/vers/jr
+	export PATH=$JR_HOME/bin:$PATH
+	export PATH=$JR_HOME/jrv:$PATH
+	export JRSH=sh
+
+Ensuite, il faut prendre en compte les changements (commande depuis votre $HOME) :
+
+	. .bashrc
+
+Vous disposez maintenant de jr, pour compiler un fichier "MonProgramme.jr" , il faut lancer :
+
+	jr MonProgramme
 
 ### Exemple
 Cette classe utilise l'appel synchrone __call__ depuis _processus1_, on ne peut donc pas savoir quel __inni__ de _processus2_ ou _processus3_ va le recevoir.
