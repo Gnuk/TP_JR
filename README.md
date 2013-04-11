@@ -45,11 +45,11 @@ Avant d'installer JR lui-même, il vous faudra
 
 #### Windows
 
-La première chose à faire est de télecharger JR : http://www.cs.ucdavis.edu/~olsson/research/jr/versions/2.00602/jr.tar.gz
+La première chose à faire est de télécharger JR : http://www.cs.ucdavis.edu/~olsson/research/jr/versions/2.00602/jr.tar.gz
 
-Décompressez ensuite JR dans le dossier ou vous voulez l'installer. Pour la suite de l'installation nous partirons du principe que nous avons décompressé JR à cette emplacement : C:\Program Files\JR\
+Décompressez ensuite JR dans le dossier où vous voulez l'installer. Pour la suite de l'installation nous partirons du principe que nous avons décompressé JR à cet emplacement : C:\Program Files\JR\
 
-Ensuite il vous faudra définir différentes variables d'environnements :
+Ensuite il vous faudra définir différentes variables d'environnement :
 
 	JR_HOME=C:\Program Files\JR
 	PATH=%PATH%;%JR_HOME%\bin\
@@ -57,7 +57,7 @@ Ensuite il vous faudra définir différentes variables d'environnements :
 	JRSH=cmd
 	JRSHC=/C
 
-A ce moment JR devrait fonctionner.
+À ce moment JR devrait fonctionner.
 
 #### Linux (Unix)
 
